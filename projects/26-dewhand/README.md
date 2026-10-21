@@ -11,7 +11,8 @@ The `title` is the player's accessible label. Videos do not have visible
 captions below them because their headers already identify the dataset.
 
 The teaser has three HOT3D examples with synchronized input and reconstruction
-panels in one MP4 per example. Thumbnail buttons select an example; muted playback
+panels in one MP4 per example, without visible player controls. Thumbnail
+buttons select an example; muted playback
 starts while the teaser is visible and pauses offscreen or in a background tab.
 Reduced-motion preferences disable automatic playback. MP4s, posters, and thumbnail
 images use the `teaser-01`, `teaser-02`, and `teaser-03` prefixes in `assets/videos/`.
