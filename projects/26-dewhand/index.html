@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>DewHand: Direct Metric World-Space Hand Motion Reconstruction from Egocentric Videos</title>
+  <meta name="description" content="DewHand directly reconstructs both hands and the camera in a shared metric world coordinate system from monocular egocentric video.">
+  <meta property="og:title" content="DewHand: Direct Metric World-Space Hand Motion Reconstruction from Egocentric Videos">
+  <meta property="og:description" content="Joint hand-camera motion generation from monocular egocentric video.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://narusuzuki.github.io/projects/26-dewhand/assets/overview.png">
+  <meta property="og:url" content="https://narusuzuki.github.io/projects/26-dewhand/">
+  <link rel="canonical" href="https://narusuzuki.github.io/projects/26-dewhand/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" type="image/png" href="./assets/favicon.png">
+  <style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#262626;background:#fff;font-synthesis:none;scroll-behavior:smooth;--accent:#286c9f;--green:#377566}
+*{box-sizing:border-box}body{margin:0;line-height:1.7}main{max-width:1080px;margin:auto;padding:0 28px}main,section,figure,.prose{min-width:0}a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}a:focus-visible,button:focus-visible{outline:3px solid #6396bf;outline-offset:5px}sup{font-size:.68em;vertical-align:super;margin-left:1px}strong{font-weight:600}
+.project-header{text-align:center;padding:53px 0 36px}.project-header h1{font-size:37px;font-weight:600;line-height:1.28;letter-spacing:-.9px;margin:0 auto 28px;max-width:1020px;overflow-wrap:break-word}.project-name{color:var(--green)}.authors{display:flex;flex-wrap:wrap;justify-content:center;gap:5px 22px;font-size:17px;margin:0 0 10px}.authors a{white-space:nowrap}.affiliations{display:flex;flex-wrap:wrap;justify-content:center;gap:3px 20px;font-size:15px;margin:0}.venue{font-size:17px;margin:14px 0 11px}.resources{display:flex;flex-wrap:wrap;gap:5px 12px;justify-content:center;font-size:18px}.unavailable{font-size:14px;color:#777;align-self:center;margin-left:5px}
+.teaser{max-width:900px;margin:0 auto 53px}.teaser img{width:100%;max-height:540px;object-fit:contain}figure{margin:25px auto 48px}img{max-width:100%}figure img{width:100%;height:auto;display:block}figcaption{font-size:14px;line-height:1.65;color:#626262;text-align:center;max-width:880px;margin:16px auto 0}.prose{max-width:900px;margin-left:auto;margin-right:auto}section{scroll-margin-top:25px;margin-top:46px}h2{font-size:26px;line-height:1.3;font-weight:600;letter-spacing:-.25px;text-align:center;margin:0 0 20px}p{font-size:16px;margin:0 0 17px}.prose p{text-align:justify}.method-figure{max-width:850px}
+.results-intro{text-align:center!important;color:#626262}.video-grid{display:grid;gap:24px;margin-top:25px}.video-grid figure{margin:0}.video-grid video{display:block;width:100%;max-width:100%;height:auto;border-radius:6px;background:#111}.video-placeholder{aspect-ratio:16/9;display:grid;place-items:center;border:1px solid #e3e7e6;border-radius:6px;background:#f6f8f7;color:#7a8781;font-size:16px}.video-grid figcaption{margin-top:10px}
+footer{max-width:1024px;margin:46px auto 0;padding:0 0 38px;display:flex;justify-content:space-between;align-items:baseline;font-size:small;color:#262626}.skip{position:absolute;left:15px;top:-100px;background:white;padding:8px;z-index:2}.skip:focus{top:10px}
+@media(max-width:760px){main{padding:0 20px}.project-header{padding:35px 0 27px}.project-header h1{font-size:29px;letter-spacing:-.6px}.desktop-break{display:none}.authors{font-size:16px;gap:6px 17px}.affiliations{font-size:13px;gap:2px 10px}.resources{font-size:16px}.teaser{margin-bottom:35px}.teaser img{max-height:none}.unavailable{flex-basis:100%;margin:5px 0 0}section{margin-top:36px}h2{font-size:24px}.prose p{text-align:left;font-size:15px}figure{margin-bottom:32px}figcaption{font-size:12px}footer{margin:34px 20px 0;font-size:small}}
+@media(max-width:450px){.project-header h1{font-size:25px}.authors{column-gap:14px}.affiliations{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}}
+
+img{max-width:100%}main,section,figure,.prose,.table-scroll{min-width:0}.table-scroll{max-width:100%}.project-header h1{overflow-wrap:break-word}@media(max-width:450px){.project-header h1{font-size:25px}.authors{column-gap:14px}.affiliations{flex-direction:column}}
+</style>
+  
+  
+</head>
+<body>
+<a class="skip" href="#method">Skip to content</a>
+<main>
+  <header class="project-header">
+    <h1><span class="project-name">DewHand</span>: Direct Metric World-Space<br class="desktop-break"> Hand Motion Reconstruction<br class="desktop-break"> from Egocentric Videos</h1>
+    <p class="authors"><a href="https://narusuzuki.github.io/">Naru Suzuki<sup>1,3</sup></a><a href="https://satoshi-ikehata.github.io/">Satoshi Ikehata<sup>2</sup></a><a href="https://tkhkaeio.github.io/">Takehiko Ohkawa<sup>1</sup></a><a href="https://sites.google.com/ut-vision.org/ysato/">Yoichi Sato<sup>1</sup></a><a href="https://shuheikurita.github.io/">Shuhei Kurita<sup>2,3</sup></a></p>
+    <p class="affiliations"><span><sup>1</sup>The University of Tokyo</span><span><sup>2</sup>National Institute of Informatics</span><span><sup>3</sup>NII LLMC</span></p>
+    <p class="venue">Preprint, 2026</p>
+    <nav class="resources" aria-label="Project resources"><span id="paper-link" class="unavailable" aria-disabled="true">Paper: coming soon</span><a href="#method">[Method]</a><a href="#results">[Results]</a><span class="unavailable">Code: coming soon</span></nav>
+  </header>
+
+  <figure class="teaser">
+    <img src="./assets/overview.png" width="2200" alt="An egocentric video reconstructed as two articulated hands and a camera trajectory in a shared 3D scene.">
+    <figcaption><strong>From egocentric video to metric world-space motion.</strong> DewHand jointly reconstructs both hands and the camera in a common world coordinate system.</figcaption>
+  </figure>
+
+  <section id="method">
+    <div class="prose"><h2>Direct World-Space Reconstruction</h2><p>Existing pipelines compose separately estimated hand and camera motion. DewHand directly generates their joint trajectories, keeping both hands and the moving camera in the same metric world frame. No separately estimated camera trajectory is composed with the hands after generation.</p></div>
+    <figure class="method-figure"><a href="#" data-image-link target="_blank" rel="noopener" aria-label="Open pipeline comparison at full size"><img loading="lazy" src="./assets/pipeline-comparison.png" alt="Comparison of multi-stage hand reconstruction pipelines and DewHand's direct joint hand-camera generation."></a><figcaption>Independent hand and camera estimation versus direct joint generation. Predictions use green for the right hand, blue for the left hand, and purple for the camera; ground truth is gray.</figcaption></figure>
+    <div class="prose"><h2>Joint Hand-Camera Flow Matching</h2><p>Frozen VGGT-Ω and HaMeR encoders provide scene geometry and hand-specific features. A multimodal transformer couples global wrist and camera motion with local hand articulation, conditioned on the video. Learned mask tokens handle missing hand observations. Flow matching generates the complete hand-camera trajectory with two integration steps.</p></div>
+    <figure><a href="#" data-image-link target="_blank" rel="noopener" aria-label="Open model architecture at full size"><img loading="lazy" src="./assets/architecture.png" alt="DewHand architecture with geometric and hand conditioning, global and local motion streams, and a multimodal diffusion transformer."></a><figcaption>The global motion stream models both wrists and the camera; the local hand stream models articulation and shape. Joint attention connects them to the visual conditions.</figcaption></figure>
+  </section>
+
+  <section id="results" class="prose">
+    <h2>Qualitative Results</h2>
+    <p class="results-intro">Reconstructed hand and camera motion from egocentric video.</p>
+    <div id="result-videos" class="video-grid">
+      <div class="video-placeholder"><span>Videos coming soon.</span></div>
+    </div>
+  </section>
+</main>
+<footer><a href="https://narusuzuki.github.io/">&lt; Home</a><span>© Naru Suzuki</span></footer>
+<script>
+window.DEWHAND_ARXIV_URL = "";
+window.DEWHAND_VIDEOS = [];
+
+const paperUrl = window.DEWHAND_ARXIV_URL || '';
+const paperPlaceholder = document.querySelector('#paper-link');
+if (paperPlaceholder && /^https:\/\/arxiv\.org\/(abs|pdf)\//.test(paperUrl)) {
+  const link = document.createElement('a');
+  link.id = 'paper-link';
+  link.href = paperUrl;
+  link.target = '_blank';
+  link.rel = 'noopener';
+  link.textContent = '[Paper]';
+  paperPlaceholder.replaceWith(link);
+}
+
+document.querySelectorAll('[data-image-link]').forEach(link => {
+  link.href = link.querySelector('img').src;
+});
+
+const videos = (window.DEWHAND_VIDEOS || []).filter(item => item && typeof item.src === 'string' && item.src.trim());
+const gallery = document.querySelector('#result-videos');
+if (gallery && videos.length) {
+  gallery.replaceChildren();
+  videos.forEach(item => {
+    const figure = document.createElement('figure');
+    const video = document.createElement('video');
+    video.controls = true;
+    video.playsInline = true;
+    video.loop = true;
+    video.muted = true;
+    video.preload = 'metadata';
+    video.src = item.src;
+    video.setAttribute('aria-label', item.title || 'DewHand reconstruction video');
+    if (item.poster) video.poster = item.poster;
+    figure.append(video);
+    if (item.title) {
+      const caption = document.createElement('figcaption');
+      caption.textContent = item.title;
+      figure.append(caption);
+    }
+    gallery.append(figure);
+  });
+}
+
+</script>
+</body>
+</html>
