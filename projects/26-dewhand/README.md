@@ -23,11 +23,14 @@ similarity registration; hand and camera predictions keep their metric scale.
 The input panel is the calibrated 90-degree view rendered from original images
 at 900 × 900, with the same optical center and axes as the cached scene input.
 All 150 input frames are paired with the corresponding reconstruction frames.
-The clouds use every valid pixel at the same 30 masked timestamps, with the
-existing confidence filter and registration, producing about 0.97–0.99 million
-points per scene. A perspective display camera orbits ±30 degrees in azimuth
-and 3 degrees in elevation around the interaction; its framing stays fixed
-throughout each clip. This display motion does not alter the predicted geometry.
+Example 1 uses every valid pixel at 30 masked timestamps (about 0.99 million
+points). Examples 2 and 3 show Rubik's cube and container manipulation, using
+cached hand-masked clouds from all 150 timestamps. Their confidence filters,
+camera-derived registration, and predicted hand/camera geometry are unchanged.
+The masks remove hands and connected wrist/forearm regions; they do not
+separately remove manipulated objects or all sleeves. A perspective display
+camera orbits ±30 degrees in azimuth and 3 degrees in elevation around the
+interaction, with a constant target and distance throughout each clip.
 
 The gallery includes two HOT3D examples and one example each from ARCTIC,
 HoloAssist, H2O, and TACO. MP4s and posters are stored in `assets/videos/`.
