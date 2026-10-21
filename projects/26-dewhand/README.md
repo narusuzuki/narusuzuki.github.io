@@ -28,8 +28,14 @@ first-camera frame with `ours_verts @ r_canon`; the saved camera poses are kept
 exactly. VGGT-Ω depth is inferred from the corresponding RGB frames. A single
 camera-derived similarity uses the mean camera-radius ratio for scale and the
 first camera pose for rotation and translation; no trajectory or hand fitting
-is used. The static tabletop cloud retains about 0.30 million points from
-source frames 60–89, excluding tracked body and expanded object masks. The
+is used. The static scene retains about 1.17 million points from 30 timestamps,
+including the surrounding floor and tabletop and excluding tracked body
+and expanded object masks. Depth uses the native image aspect at 352 × 256.
+For display, the physical ARCTIC world +Z axis is transformed into the first
+camera frame and mapped to display +Z, so gravity points down. The world
+vertical was checked against the upright SMPL-X torso axis; the legacy dump
+field named gravity incorrectly used world Y and is not used for display.
+All hands, cameras, and scene points receive the same rigid display transform. The
 machine uses only its current frame's visible depth points, without hidden
 surface completion or object fitting. Masks have reviewed anchors at frames
 0, 37, 75, 112, and 149.
