@@ -16,6 +16,9 @@ Video entries specify dimensions to reserve space before loading; the first
 example for each dataset has an `id` used by the dataset navigation.
 Update the `v` query in both `src` and `poster` when replacing a clip.
 
+DewHand panels use a green header, border, and light background for emphasis;
+panel dimensions and rendering scale remain shared with the other methods.
+
 All clips contain 150 frames at 30 fps. They use the manuscript's shared
 viewpoint, display scale, and joint two-hand SE(3) alignment without scale
 correction. HoloAssist GT and ReViV use the anatomical connections for the
