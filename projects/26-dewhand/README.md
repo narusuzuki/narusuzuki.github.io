@@ -10,6 +10,19 @@ Set `window.DEWHAND_ARXIV_URL` when the paper is available, and add video entrie
 The `title` is the player's accessible label. Videos do not have visible
 captions below them because their headers already identify the dataset.
 
+The teaser has three HOT3D examples with synchronized input and reconstruction
+panels in one MP4 per example. Thumbnail buttons select an example; muted playback
+starts while the teaser is visible and pauses offscreen or in a background tab.
+Reduced-motion preferences disable automatic playback. MP4s, posters, and thumbnail
+images use the `teaser-01`, `teaser-02`, and `teaser-03` prefixes in `assets/videos/`.
+
+The teaser uses existing DewHand hand and camera predictions with cached VGGT-Ω
+scene point clouds. Only the cloud uses the existing camera-derived global
+similarity registration; hand and camera predictions keep their metric scale.
+The input panel is the calibrated 90-degree view rendered from original images
+at 900 × 900, with the same optical center and axes as the cached scene input.
+All 150 input frames are paired with the corresponding reconstruction frames.
+
 The gallery includes two HOT3D examples and one example each from ARCTIC,
 HoloAssist, H2O, and TACO. MP4s and posters are stored in `assets/videos/`.
 Video entries specify dimensions to reserve space before loading; the first
