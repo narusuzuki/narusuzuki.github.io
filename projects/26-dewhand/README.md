@@ -6,14 +6,17 @@ https://narusuzuki.github.io/projects/26-dewhand/
 
 `index.html` contains the project page, with figures in `assets/`.
 Set `window.DEWHAND_ARXIV_URL` when the paper is available, and add video entries
-(`src`, optional `title` and `poster`) to `window.DEWHAND_VIDEOS` to populate the results gallery.
+(`src`, `dataset`, optional `example`, `title` and `poster`) to `window.DEWHAND_VIDEOS` to populate the results gallery.
 The `title` is the player's accessible label. Videos do not have visible
 captions below them because their headers already identify the dataset.
 
 The gallery includes two HOT3D examples and one example each from ARCTIC,
 HoloAssist, H2O, and TACO. MP4s and posters are stored in `assets/videos/`.
 Video entries specify dimensions to reserve space before loading; the first
-example for each dataset has an `id` used by the dataset navigation.
+example for each dataset has an `id`. Dataset and example buttons show one
+video at a time; switching pauses the previous player and loads the chosen
+video on demand. Selection is preserved in the URL hash for direct links,
+and each dataset remembers its last selected example during the visit.
 Update the `v` query in both `src` and `poster` when replacing a clip.
 
 DewHand panels use a green header, border, and light background for emphasis;
