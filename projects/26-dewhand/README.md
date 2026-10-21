@@ -22,15 +22,22 @@ scene point clouds. Only the cloud uses the existing camera-derived global
 similarity registration; hand and camera predictions keep their metric scale.
 The input panel is the calibrated 90-degree view rendered from original images
 at 900 × 900, with the same optical center and axes as the cached scene input.
-All 150 input frames are paired with the corresponding reconstruction frames.
-Example 1 uses every valid pixel at 30 masked timestamps (about 0.99 million
-points). Examples 2 and 3 show Rubik's cube and container manipulation, using
-cached hand-masked clouds from all 150 timestamps. Their confidence filters,
-camera-derived registration, and predicted hand/camera geometry are unchanged.
-The masks remove hands and connected wrist/forearm regions; they do not
-separately remove manipulated objects or all sleeves. A perspective display
-camera orbits ±30 degrees in azimuth and 3 degrees in elevation around the
-interaction, with a constant target and distance throughout each clip.
+Every displayed input frame is paired with its corresponding reconstruction.
+Examples 1 and 3 use all valid pixels at 30 masked timestamps (about 0.99 million
+points), with the existing confidence filter and camera-derived registration.
+Example 2 shows source frames 37–149 of a container-manipulation clip
+(about 3.77 seconds).
+Its static cloud uses source timestamps 30–149, removes hand/arm masks and a
+one-pixel-expanded object mask, and retains about 3.90 million background points.
+A separately tracked object mask protects the container from hand removal;
+only the current frame's visible object-depth samples are rendered. Object points
+use finite positive cached depth without the global background confidence cutoff.
+No hidden surface completion, object pose/shape fitting, temporal interpolation,
+or adjustment to the predicted hands is applied. SAM2 object masks use reviewed
+anchors at source frames 29, 37, 75, 112, and 149; the first 37 frames are omitted.
+The hand and camera predictions, metric scale, and scene registration stay unchanged.
+A perspective display camera orbits ±30 degrees in azimuth and 3 degrees in
+elevation around the interaction, with a constant target and distance per clip.
 
 The gallery includes two HOT3D examples and one example each from ARCTIC,
 HoloAssist, H2O, and TACO. MP4s and posters are stored in `assets/videos/`.
@@ -44,8 +51,8 @@ Update the `v` query in both `src` and `poster` when replacing a clip.
 DewHand panels use a green header, border, and light background for emphasis;
 panel dimensions and rendering scale remain shared with the other methods.
 
-All clips contain 150 frames at 30 fps. They use the manuscript's shared
-viewpoint, display scale, and joint two-hand SE(3) alignment without scale
+All gallery comparison clips contain 150 frames at 30 fps. They use the
+manuscript's shared viewpoint, display scale, and joint two-hand SE(3) alignment without scale
 correction. HoloAssist GT and ReViV use the anatomical connections for the
 exported joint order; ReViV cameras are converted from world-to-camera to
 camera-to-world before the same hand alignment is applied. The ARCTIC
