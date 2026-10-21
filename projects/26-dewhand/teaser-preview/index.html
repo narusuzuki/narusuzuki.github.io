@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#377566">
+<title>DewHand · Teaser preview</title>
+<link rel="icon" href="../assets/favicon.png">
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#243a31;background:#fff;font-synthesis:none}*{box-sizing:border-box}body{margin:0}main{max-width:1200px;margin:auto;padding:28px 20px 48px}header{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 24px;gap:20px}h1{font-size:30px;letter-spacing:-1px;margin:0;font-weight:750;color:#377566}header p{margin:6px 0 0;color:#718078;font-size:14px}a{color:#547066;font-size:14px;text-decoration:none}a:hover{text-decoration:underline}.viewer{overflow:hidden;border-radius:12px;background:#fff;width:100%;aspect-ratio:1840/1000}.viewer video{display:block;width:100%;height:100%;object-fit:contain}.viewer.focus{aspect-ratio:1/1}.viewer.focus video{width:204.444444%;height:111.111111%;max-width:none;object-fit:fill;transform:translate(-50.543478%,-5.8%)}.toolbar{display:flex;justify-content:center;gap:6px;margin:20px 0 0}.toolbar button{font:inherit;font-size:13px;padding:9px 16px;border:1px solid #e2e8e4;border-radius:7px;background:#fff;color:#60746a;cursor:pointer}.toolbar button[aria-pressed=true]{color:#377566;background:#edf6f1;border-color:#a8c8b8}.samples{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;max-width:490px;margin:22px auto 0}.samples button{min-width:0;padding:5px 5px 9px;border:2px solid transparent;border-radius:10px;background:#f5f7f6;color:#52655e;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.samples button[aria-pressed=true]{border-color:#377566;background:#edf6f1;color:#377566}.samples img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:5px;margin-bottom:6px}.samples button:hover{background:#edf6f1}button:focus-visible,a:focus-visible{outline:3px solid #377566;outline-offset:4px}@media(max-width:600px){main{padding:22px 12px 32px}header{margin:0 8px 20px}h1{font-size:26px}.samples{max-width:390px;gap:8px}.toolbar{margin-top:16px}}
+</style>
+</head>
+<body>
+<main>
+<header><div><h1>DewHand</h1><p>Teaser preview</p></div><a href="../#teaser">Project page ↗</a></header>
+<div class="viewer" id="viewer"><video id="preview-video" width="1840" height="1000" muted loop playsinline preload="metadata" aria-label="DewHand teaser preview, example 4"></video></div>
+<nav class="toolbar" aria-label="Video view"><button type="button" aria-pressed="true" data-view="pair">Input + 3D</button><button type="button" aria-pressed="false" data-view="3d">3D</button></nav>
+<nav class="samples" aria-label="Teaser examples"></nav>
+</main>
+<script>
+window.DEWHAND_PREVIEWS = [
+  {
+    "number": 4,
+    "src": "./assets/teaser-04.mp4?v=629f2d38",
+    "poster": "./assets/teaser-04.jpg?v=629f2d38",
+    "thumbnail": "./assets/teaser-04-thumb.jpg?v=629f2d38"
+  },
+  {
+    "number": 5,
+    "src": "./assets/teaser-05.mp4?v=6b9338cf",
+    "poster": "./assets/teaser-05.jpg?v=6b9338cf",
+    "thumbnail": "./assets/teaser-05-thumb.jpg?v=6b9338cf"
+  },
+  {
+    "number": 6,
+    "src": "./assets/teaser-06.mp4?v=b9bcb553",
+    "poster": "./assets/teaser-06.jpg?v=b9bcb553",
+    "thumbnail": "./assets/teaser-06-thumb.jpg?v=b9bcb553"
+  }
+];
+const video = document.querySelector('#preview-video');
+const nav = document.querySelector('.samples');
+const clips = window.DEWHAND_PREVIEWS;
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let visible = true;
+let resume = !reducedMotion.matches;
+video.muted = video.defaultMuted = true;
+function playIfVisible(){if(!visible || document.hidden){resume=resume||!video.paused;video.pause();}else if(resume){resume=false;video.play().catch(()=>{});}}
+const buttons = clips.map((item,index)=>{
+  const button = document.createElement('button');button.type='button';button.setAttribute('aria-controls',video.id);button.setAttribute('aria-label',`Show example ${item.number}`);button.setAttribute('aria-pressed',String(index===0));
+  const image = document.createElement('img');image.src=item.thumbnail;image.alt='';image.width=320;image.height=200;button.append(image,`Example ${item.number}`);
+  button.addEventListener('click',()=>{video.pause();video.poster=item.poster;video.src=item.src;video.setAttribute('aria-label',`DewHand teaser preview, example ${item.number}`);buttons.forEach((other,j)=>other.setAttribute('aria-pressed',String(j===index)));resume=true;playIfVisible();});nav.append(button);return button;
+});
+if(clips.length){video.poster=clips[0].poster;video.src=clips[0].src;playIfVisible();}
+document.querySelectorAll('[data-view]').forEach(button=>button.addEventListener('click',()=>{document.querySelector('#viewer').classList.toggle('focus',button.dataset.view==='3d');document.querySelectorAll('[data-view]').forEach(other=>other.setAttribute('aria-pressed',String(other===button)));}));
+if('IntersectionObserver' in window)new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible){playIfVisible();}else{resume=resume||!video.paused;video.pause();}},{threshold:.15}).observe(video);
+document.addEventListener('visibilitychange',playIfVisible);
+reducedMotion.addEventListener('change',()=>{if(reducedMotion.matches){resume=false;video.pause();}});
+</script>
+</body>
+</html>
