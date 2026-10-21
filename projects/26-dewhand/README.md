@@ -10,54 +10,63 @@ Set `window.DEWHAND_ARXIV_URL` when the paper is available, and add video entrie
 The `title` is the player's accessible label. Videos do not have visible
 captions below them because their headers already identify the dataset.
 
-The teaser has one ARCTIC and two HOT3D examples with synchronized input and reconstruction
-panels in one MP4 per example, without visible player controls. Thumbnail
-buttons select an example; muted playback
-starts while the teaser is visible and pauses offscreen or in a background tab.
-Reduced-motion preferences disable automatic playback. MP4s, posters, and thumbnail
-images use the `teaser-01`, `teaser-02`, and `teaser-03` prefixes in `assets/videos/`.
+The teaser has six examples, each with synchronized input and reconstruction
+panels in one MP4 and no visible player controls. Example buttons select a
+clip; muted inline playback starts while visible and pauses offscreen or in a
+background tab. Reduced-motion preferences disable automatic playback.
+The files use the `teaser-01` through `teaser-06` prefixes in `assets/videos/`.
 
-The teaser uses existing DewHand hand and camera predictions with VGGT-Ω
-scene point clouds. Only the cloud uses the existing camera-derived global
-similarity registration; hand and camera predictions keep their metric scale.
-Example 1 uses the ARCTIC capsule coffee machine clip
-`s05_capsulemachine_use_02__450`, with all 150 original prediction frames.
-The native 1400 × 1000 input is fitted into the 900 × 900 panel with its aspect
-ratio preserved. Saved canonical hand coordinates are converted back to the
-first-camera frame with `ours_verts @ r_canon`; the saved camera poses are kept
-exactly. VGGT-Ω depth is inferred from the corresponding RGB frames. A single
-camera-derived similarity uses the mean camera-radius ratio for scale and the
-first camera pose for rotation and translation; no trajectory or hand fitting
-is used. The static scene retains about 1.17 million points from 30 timestamps,
-including the surrounding floor and tabletop and excluding tracked body
-and expanded object masks. Depth uses the native image aspect at 352 × 256.
-For display, the physical ARCTIC world +Z axis is transformed into the first
-camera frame and mapped to display +Z, so gravity points down. The world
-vertical was checked against the upright SMPL-X torso axis; the legacy dump
-field named gravity incorrectly used world Y and is not used for display.
-All hands, cameras, and scene points receive the same rigid display transform. The
-machine uses only its current frame's visible depth points, without hidden
-surface completion or object fitting. Masks have reviewed anchors at frames
-0, 37, 75, 112, and 149.
-For the HOT3D examples, the input panel is the calibrated 90-degree view
-rendered from original images at 900 × 900, with the same optical center and
-axes as the cached scene input. Every displayed input frame is paired with
-its corresponding reconstruction. Example 3 uses all valid pixels at 30
-masked timestamps (about 0.99 million points), with the existing confidence
-filter and camera-derived registration.
-Example 2 shows source frames 37–149 of a container-manipulation clip
-(about 3.77 seconds).
-Its static cloud uses source timestamps 30–149, removes hand/arm masks and a
-one-pixel-expanded object mask, and retains about 3.90 million background points.
-A separately tracked object mask protects the container from hand removal;
-only the current frame's visible object-depth samples are rendered. Object points
-use finite positive cached depth without the global background confidence cutoff.
-No hidden surface completion, object pose/shape fitting, temporal interpolation,
-or adjustment to the predicted hands is applied. SAM2 object masks use reviewed
-anchors at source frames 29, 37, 75, 112, and 149; the first 37 frames are omitted.
-The hand and camera predictions, metric scale, and scene registration stay unchanged.
-A perspective display camera orbits ±30 degrees in azimuth and 3 degrees in
-elevation around the interaction, with a constant target and distance per clip.
+1. HOT3D `P0012_d85e10f6__2430`: the paper's teaser example, identified by
+   its six original RGB thumbnails (container handling, then reaching for the
+   three-tier shelf). All 150 source prediction frames are shown. The dense
+   static cloud removes tracked hands/arms and the moving container; the
+   container uses current-frame visible depth samples.
+2. HOT3D `P0011_76ea6d47__2955`: source frames 37–149, about 3.77 seconds.
+   The static scene retains about 3.90 million background samples, excluding
+   hands, arms, and an expanded object mask. A separate tracked container mask
+   protects current-frame object points from hand removal.
+3. ARCTIC `s05_capsulemachine_use_02__450`: 150 frames, including the surrounding
+   floor and tabletop (about 1.17 million static points). Depth uses 352 × 256
+   images with the native aspect preserved. Saved hand coordinates are brought
+   back to camera0 with `ours_verts @ r_canon`; camera poses remain exact. For
+   display, ARCTIC world +Z is transformed by the original camera calibration
+   and mapped to display +Z, so gravity points down. This was checked against
+   the upright SMPL-X torso axis. The legacy dump's gravity field used world Y
+   and is not used for this display. Hands, cameras, and points receive the same
+   rigid display transform. The coffee machine uses current-frame depth points.
+4. In-the-wild home cooking: source RGB `HaWoR/example/segment_037.mp4`,
+   frames 0–89 (3 seconds). DewHand is run on RGB with detected HaMeR features;
+   no HaWoR predictions or GT poses are used. The pan uses current-frame points.
+5. In-the-wild plate carrying: source RGB `HaWoR/example/video_0.mp4`,
+   frames 0–119 (4 seconds), with the same independent DewHand inference.
+   Moving plates use current-frame points. These are exploratory results;
+   hand-to-scene position errors remain, especially during camera movement.
+6. HoloAssist printer operation: `z013-june-16-22-printer_small__1380__0`,
+   with original DewHand hand and camera predictions and a dense scene cloud
+   from 50 masked source timestamps (about 1.34 million points).
+
+Only the scene cloud receives camera-derived similarity registration: scale is
+from mean centered camera radii, and rotation/translation are anchored to the
+first camera pose. Predicted metric hands and cameras are not fitted or scaled.
+Object points use finite positive source depth without the background confidence
+cutoff. There is no hidden-surface completion, object shape fitting, or geometric
+adjustment to predicted hands. Dataset canonical-frame and gravity metadata are
+used for display when available; in-the-wild up is estimated from a predicted
+work-surface normal, without inertial or GT gravity.
+
+The in-the-wild clips use the paper comparison checkpoint `base_158848.pt`,
+HaMeR mean patch features, nearest-valid feature filling, two flow steps, and
+five-sample velocity averaging. Their fixed-length model inputs repeat the last
+RGB frame to provide 150 context frames; padded frames are never displayed.
+All displayed input and prediction frames are paired in one encoded video.
+The HOT3D input panels use calibrated 90-degree views rendered at 900 × 900;
+other inputs retain their source aspect ratio inside the same panel.
+
+The display camera moves at constant speed in one direction across 60 degrees
+per clip, at a fixed elevation with the vertical kept upright. It restarts
+with the input clip's loop. The in-the-wild views track a smoothed interaction
+center so that camera movement does not make the hands too small; only the
+display camera moves. Source point and prediction geometry are unchanged.
 
 The gallery includes two HOT3D examples and one example each from ARCTIC,
 HoloAssist, H2O, and TACO. MP4s and posters are stored in `assets/videos/`.
