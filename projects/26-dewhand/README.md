@@ -5,7 +5,8 @@ Project page for **DewHand: Direct Metric World-Space Hand Motion Reconstruction
 https://narusuzuki.github.io/projects/26-dewhand/
 
 `index.html` contains the project page, with figures in `assets/`.
-Set `window.DEWHAND_ARXIV_URL` when the paper is available, and add video entries
+Paper: https://arxiv.org/abs/2610.29936 (also set in `window.DEWHAND_ARXIV_URL`).
+Add video entries
 (`src`, `dataset`, optional `example`, `title` and `poster`) to `window.DEWHAND_VIDEOS` to populate the results gallery.
 The `title` is the player's accessible label. Videos do not have visible
 captions below them because their headers already identify the dataset.
