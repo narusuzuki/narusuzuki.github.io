@@ -35,16 +35,15 @@ The files use the `teaser-01` through `teaser-06` prefixes in `assets/videos/`.
    the upright SMPL-X torso axis. The legacy dump's gravity field used world Y
    and is not used for this display. Hands, cameras, and points receive the same
    rigid display transform. The coffee machine uses current-frame depth points.
-4. In-the-wild home cooking: source RGB `HaWoR/example/segment_037.mp4`,
-   frames 0–89 (3 seconds). DewHand is run on RGB with detected HaMeR features;
-   no HaWoR predictions or GT poses are used. The pan uses current-frame points.
-5. In-the-wild plate carrying: source RGB `HaWoR/example/video_0.mp4`,
-   frames 0–119 (4 seconds), with the same independent DewHand inference.
-   Moving plates use current-frame points. These are exploratory results;
-   hand-to-scene position errors remain, especially during camera movement.
-6. HoloAssist printer operation: `z013-june-16-22-printer_small__1380__0`,
-   with original DewHand hand and camera predictions and a dense scene cloud
-   from 50 masked source timestamps (about 1.34 million points).
+4. ARCTIC `s05_box_use_01__300`: opening a wooden box, source frames 0–119
+   (4 seconds), with a gravity-aligned scene, about 882,000 static points,
+   current-frame object points and the predicted camera trajectory.
+5. HoloAssist `z156-aug-26-22-knarrevik_disassemble__1740__0`: disassembling
+   a black furniture frame, 150 frames (5 seconds).
+6. HoloAssist `z204-sep-25-22-rashult_assemble__19320__0`: fitting a caster
+   to a cart frame, 150 frames (5 seconds). Both HoloAssist clips retain
+   current-frame object points and the original DewHand hands/cameras;
+   original hand/arm pixels are excluded from static clouds.
 
 Only the scene cloud receives camera-derived similarity registration: scale is
 from mean centered camera radii, and rotation/translation are anchored to the
@@ -52,22 +51,16 @@ first camera pose. Predicted metric hands and cameras are not fitted or scaled.
 Object points use finite positive source depth without the background confidence
 cutoff. There is no hidden-surface completion, object shape fitting, or geometric
 adjustment to predicted hands. Dataset canonical-frame and gravity metadata are
-used for display when available; in-the-wild up is estimated from a predicted
-work-surface normal, without inertial or GT gravity.
+used for display when available.
 
-The in-the-wild clips use the paper comparison checkpoint `base_158848.pt`,
-HaMeR mean patch features, nearest-valid feature filling, two flow steps, and
-five-sample velocity averaging. Their fixed-length model inputs repeat the last
-RGB frame to provide 150 context frames; padded frames are never displayed.
 All displayed input and prediction frames are paired in one encoded video.
 The HOT3D input panels use calibrated 90-degree views rendered at 900 × 900;
 other inputs retain their source aspect ratio inside the same panel.
 
 The display camera moves at constant speed in one direction across 60 degrees
 per clip, at a fixed elevation with the vertical kept upright. It restarts
-with the input clip's loop. The in-the-wild views track a smoothed interaction
-center so that camera movement does not make the hands too small; only the
-display camera moves. Source point and prediction geometry are unchanged.
+with the input clip's loop. Only the display camera moves; source point and
+prediction geometry are unchanged.
 
 The gallery includes two HOT3D examples and one example each from ARCTIC,
 HoloAssist, H2O, and TACO. MP4s and posters are stored in `assets/videos/`.
