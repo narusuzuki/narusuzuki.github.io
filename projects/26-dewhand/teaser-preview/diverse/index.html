@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#377566">
+<title>DewHand · Diverse teaser preview</title>
+<link rel="icon" href="../../assets/favicon.png">
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#243a31;background:#fff;font-synthesis:none}*{box-sizing:border-box}body{margin:0}main{max-width:1200px;margin:auto;padding:28px 20px 48px}header{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 24px;gap:20px}h1{font-size:30px;letter-spacing:-1px;margin:0;font-weight:750;color:#377566}header p{margin:6px 0 0;color:#718078;font-size:14px}a{color:#547066;font-size:14px;text-decoration:none}a:hover{text-decoration:underline}.viewer{overflow:hidden;border-radius:12px;background:#fff;width:100%;aspect-ratio:1840/1000}.viewer video{display:block;width:100%;height:100%;object-fit:contain}.samples{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;max-width:680px;margin:22px auto 0}.samples button{min-width:0;padding:5px 5px 9px;border:2px solid transparent;border-radius:10px;background:#f5f7f6;color:#52655e;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.samples button[aria-pressed=true]{border-color:#377566;background:#edf6f1;color:#377566}.samples img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:5px;margin-bottom:6px}.samples button:hover{background:#edf6f1}button:focus-visible,a:focus-visible{outline:3px solid #377566;outline-offset:4px}@media(max-width:600px){main{padding:22px 12px 32px}header{margin:0 8px 20px}h1{font-size:26px}.samples{grid-template-columns:repeat(3,minmax(0,1fr));max-width:390px;gap:8px}}
+</style>
+</head>
+<body>
+<main>
+<header><div><h1>DewHand</h1><p>Five distinct teaser examples · preview</p></div><a href="../../#teaser">Project page ↗</a></header>
+<div class="viewer"><video id="preview-video" width="1840" height="1000" muted loop playsinline preload="metadata" aria-label="DewHand teaser preview, example 1"></video></div>
+<nav class="samples" aria-label="Teaser examples"></nav>
+</main>
+<script>
+const clips = [
+  {file: '01', hash: '6ab96896'},
+  {file: '03', hash: '57764eda'},
+  {file: '04', hash: '629f2d38'},
+  {file: '05', hash: 'f09e4998'},
+  {file: '06', hash: '989aae81'}
+];
+const video = document.querySelector('#preview-video');
+const nav = document.querySelector('.samples');
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+let visible = true;
+let resume = !reducedMotion.matches;
+video.muted = video.defaultMuted = true;
+function asset(item, ext) { return `../../assets/videos/teaser-${item.file}.${ext}?v=${item.hash}`; }
+function playIfVisible() {
+  if (!visible || document.hidden) { resume = resume || !video.paused; video.pause(); }
+  else if (resume) { resume = false; video.play().catch(() => {}); }
+}
+const buttons = clips.map((item, index) => {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.setAttribute('aria-controls', video.id);
+  button.setAttribute('aria-label', `Show example ${index + 1}`);
+  button.setAttribute('aria-pressed', String(index === 0));
+  const thumbnail = document.createElement('img');
+  thumbnail.src = asset(item, 'jpg').replace('.jpg?', '-thumb.jpg?');
+  thumbnail.alt = '';
+  thumbnail.width = 240;
+  thumbnail.height = 150;
+  button.append(thumbnail, `Example ${index + 1}`);
+  button.addEventListener('click', () => {
+    video.pause();
+    video.poster = asset(item, 'jpg');
+    video.src = asset(item, 'mp4');
+    video.setAttribute('aria-label', `DewHand teaser preview, example ${index + 1}`);
+    buttons.forEach((other, j) => other.setAttribute('aria-pressed', String(j === index)));
+    resume = true;
+    playIfVisible();
+  });
+  nav.append(button);
+  return button;
+});
+video.poster = asset(clips[0], 'jpg');
+video.src = asset(clips[0], 'mp4');
+playIfVisible();
+if ('IntersectionObserver' in window) new IntersectionObserver(entries => {
+  visible = entries[0].isIntersecting;
+  playIfVisible();
+}, {threshold: .15}).observe(video);
+document.addEventListener('visibilitychange', playIfVisible);
+reducedMotion.addEventListener('change', () => {
+  if (reducedMotion.matches) { resume = false; video.pause(); }
+});
+</script>
+</body>
+</html>
