@@ -9,19 +9,20 @@
 <link rel="icon" href="../../assets/favicon.png">
 <style>
 :root{font-family:Arial,Helvetica,sans-serif;color:#243a31;background:#fff;font-synthesis:none}*{box-sizing:border-box}body{margin:0}main{max-width:1200px;margin:auto;padding:28px 20px 48px}header{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 24px;gap:20px}h1{font-size:30px;letter-spacing:-1px;margin:0;font-weight:750;color:#377566}header p{margin:6px 0 0;color:#718078;font-size:14px}a{color:#547066;font-size:14px;text-decoration:none}a:hover{text-decoration:underline}.viewer{overflow:hidden;border-radius:12px;background:#fff;width:100%;aspect-ratio:1840/1000}.viewer video{display:block;width:100%;height:100%;object-fit:contain}.samples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:420px;margin:22px auto 0}.samples button{min-width:0;padding:5px 5px 9px;border:2px solid transparent;border-radius:10px;background:#f5f7f6;color:#52655e;font:inherit;font-size:13px;font-weight:600;cursor:pointer}.samples button[aria-pressed=true]{border-color:#377566;background:#edf6f1;color:#377566}.samples img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;border-radius:5px;margin-bottom:6px}.samples button:hover{background:#edf6f1}button:focus-visible,a:focus-visible{outline:3px solid #377566;outline-offset:4px}@media(max-width:600px){main{padding:22px 12px 32px}header{margin:0 8px 20px}h1{font-size:26px}.samples{max-width:360px;gap:8px}}
-.viewer.focus{aspect-ratio:920/1000}.viewer.focus video{width:200%;max-width:none;object-fit:fill;transform:translateX(-50%)}.view-options{display:flex;justify-content:flex-end;margin:8px 3px 0}.view-options button{border:0;background:none;color:#377566;font:inherit;font-size:13px;font-weight:600;padding:6px 4px;cursor:pointer}.view-options button:hover{text-decoration:underline}
+.viewer.focus{aspect-ratio:920/1000}.viewer.focus video{width:200%;max-width:none;object-fit:fill;transform:translateX(-50%)}.view-options{display:flex;justify-content:flex-end;margin:8px 3px 0}.view-options button{border:0;background:none;color:#377566;font:inherit;font-size:13px;font-weight:600;padding:6px 4px;cursor:pointer}.view-options button:hover{text-decoration:underline}.samples{grid-template-columns:repeat(3,minmax(0,1fr));max-width:660px}@media(max-width:600px){.samples{grid-template-columns:repeat(2,minmax(0,1fr));max-width:360px}.samples button:last-child:nth-child(odd){grid-column:1/-1;width:50%;justify-self:center}}
 </style>
 </head>
 <body>
 <main>
 <header><div><h1>DewHand</h1><p>HOT3D alternative · preview</p></div><a href="../../#teaser">Project page ↗</a></header>
-<div class="viewer"><video id="preview-video" width="1840" height="1000" muted loop playsinline preload="metadata" aria-label="DewHand HOT3D black container candidate"></video></div>
+<div class="viewer"><video id="preview-video" width="1840" height="1000" muted loop playsinline preload="metadata" aria-label="DewHand HOT3D orange carton candidate"></video></div>
 <div class="view-options"><button id="view-toggle" type="button" aria-controls="preview-video"></button></div>
 <nav class="samples" aria-label="Compare HOT3D examples"></nav>
 </main>
 <script>
 const clips = [
-  {label:'Black container candidate',src:'./assets/black-holder.mp4?v=171aed11',poster:'./assets/black-holder.jpg?v=171aed11',thumb:'./assets/black-holder-thumb.jpg?v=171aed11'},
+  {label:'Orange carton · 1.7 s',src:'./assets/orange-carton.mp4?v=42c7fe1d',poster:'./assets/orange-carton.jpg?v=42c7fe1d',thumb:'./assets/orange-carton-thumb.jpg?v=42c7fe1d'},
+  {label:'Black container · 5 s',src:'./assets/black-holder.mp4?v=171aed11',poster:'./assets/black-holder.jpg?v=171aed11',thumb:'./assets/black-holder-thumb.jpg?v=171aed11'},
   {label:'Current Example 2',src:'../../assets/videos/teaser-02.mp4?v=740178fc',poster:'../../assets/videos/teaser-02.jpg?v=740178fc',thumb:'../../assets/videos/teaser-02-thumb.jpg?v=740178fc'}
 ];
 const video=document.querySelector('#preview-video');
